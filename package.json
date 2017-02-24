@@ -1,0 +1,22 @@
+{
+  "name": "requisites",
+  "version": "0.0.0",
+  "description": "requisites generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha src/test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobrodiy/requisites.git"
+  },
+  "author": "https://github.com/adobrodiy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adobrodiy/requisites/issues"
+  },
+  "homepage": "https://github.com/adobrodiy/requisites#readme",
+  "devDependencies": {
+    "mocha": "3.2.0"
+  }
+}
