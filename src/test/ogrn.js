@@ -1,10 +1,9 @@
 'use strict';
 
 var assert = require( 'assert' );
+var ogrnGeneratorFabric = require( './../lib/ogrn.js' );
 
 describe( 'Ogrn generator', function () {
-
-    var ogrnGeneratorFabric = require( './../lib/ogrn.js' );
 
     var options = {
         initVals: [ "2", "3" ],
