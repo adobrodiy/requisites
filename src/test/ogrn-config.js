@@ -1,30 +1,30 @@
 'use strict';
 
-var assert = require( 'assert' );
-var ogrnConfigFabric = require( './../lib/ogrn-config.js' );
+const assert = require( 'assert' );
+const ogrnConfigFabric = require( './../lib/ogrn-config.js' );
 
 describe( 'Ogrn config', function () {
 
-    var options = {
+    const options = {
         yearsLength: 2,
         codesCount: 3,
         numbersCount: 4
     };
 
-    var resultProps = [
+    const resultProps = [
         'initVals', 'years', 'subjects', 'codes', 'numbers'
     ];
 
-    var config;
+    let config;
 
     it( 'It instants', function () {
         config = ogrnConfigFabric( options );
     } );
 
     it( 'Result has required props', function () {
-        for ( var index in resultProps ) {
-            assert.notEqual( config[ resultProps[ index ] ], undefined );
-        }
+        resultProps.forEach( function ( key ) {
+            assert.notEqual( config[ key ], undefined );
+        } );
     } );
 
     it( 'It gets options.yearsLength', function () {

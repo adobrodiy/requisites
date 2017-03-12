@@ -18,7 +18,7 @@ module.exports = function ogrnFactory ( options ) {
 
     options = JSON.parse( JSON.stringify( options ) );
 
-    var getCodes;
+    let getCodes;
 
     // Checks if it is array
     if ( options.codes.length ) {
@@ -34,15 +34,15 @@ module.exports = function ogrnFactory ( options ) {
 
     return {
         generate: function () {
-            var initVal     = getRandomElement( options.initVals            );
-            var year        = getRandomElement( options.years               );
-            var subject     = getRandomElement( options.subjects            );
-            var code        = getRandomElement( getCodes( subject )         );
-            var number      = getRandomElement( options.numbers             );
+            const initVal     = getRandomElement( options.initVals            );
+            const year        = getRandomElement( options.years               );
+            const subject     = getRandomElement( options.subjects            );
+            const code        = getRandomElement( getCodes( subject )         );
+            const number      = getRandomElement( options.numbers             );
 
-            var str = '' + initVal + year + subject + code + number;
+            let str = '' + initVal + year + subject + code + number;
 
-            var check = parseInt( str ) % 11 % 10 ;
+            const check = parseInt( str ) % 11 % 10 ;
 
             str += check;
 
@@ -51,14 +51,14 @@ module.exports = function ogrnFactory ( options ) {
 
         validate: function ( str ) {
             str = str || '';
-            var initVal         = str[ 0 ];
-            var year            = str.slice( 1, 3 );
-            var subject         = str.slice( 3, 5 );
-            var code            = str.slice( 5, 7 );
-            var number          = str.slice( 7, 12 );
-            var check           = str[ 12 ];
+            const initVal         = str[ 0 ];
+            const year            = str.slice( 1, 3 );
+            const subject         = str.slice( 3, 5 );
+            const code            = str.slice( 5, 7 );
+            const number          = str.slice( 7, 12 );
+            const check           = str[ 12 ];
 
-            var valid = {};
+            const valid = {};
             valid.lengthVal     = str.length === 13;
             valid.initVal       = options.initVals          .indexOf( initVal   ) !== -1;
             valid.year          = options.years             .indexOf( year      ) !== -1;
@@ -66,7 +66,7 @@ module.exports = function ogrnFactory ( options ) {
             valid.code          = getCodes( subject )       .indexOf( code      ) !== -1;
             valid.number        = options.numbers           .indexOf( number    ) !== -1;
 
-            var checkStr = '' + initVal + year + subject + code + number;
+            const checkStr = '' + initVal + year + subject + code + number;
 
             valid.check = parseInt( checkStr ) % 11 % 10 == check ;
 

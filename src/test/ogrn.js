@@ -1,11 +1,11 @@
 'use strict';
 
-var assert = require( 'assert' );
-var ogrnGeneratorFabric = require( './../lib/ogrn.js' );
+const assert = require( 'assert' );
+const ogrnGeneratorFabric = require( './../lib/ogrn.js' );
 
 describe( 'Ogrn generator', function () {
 
-    var options = {
+    const options = {
         initVals: [ "2", "3" ],
         years: [ "17", "16", "15" ],
         subjects: [ "01", "02" ],
@@ -16,7 +16,7 @@ describe( 'Ogrn generator', function () {
         numbers: [ "12345", "54321" ]
     };
 
-    var optionsWithCodesArray = {
+    const optionsWithCodesArray = {
         initVals: [ "2", "3" ],
         years: [ "17", "16", "15" ],
         subjects: [ "01", "02" ],
@@ -24,7 +24,7 @@ describe( 'Ogrn generator', function () {
         numbers: [ "12345", "54321" ]
     };
 
-    var optionsForSingle = {
+    const optionsForSingle = {
         initVals: [ "9" ],
         years: [ "01" ],
         subjects: [ "01" ],
@@ -32,14 +32,13 @@ describe( 'Ogrn generator', function () {
         numbers: [ "45678" ]
     };
 
-    var checkValidation = function ( validation, checks, defaultCheck ) {
+    function checkValidation ( validation, checks, defaultCheck ) {
         defaultCheck = ( defaultCheck === undefined ? true : defaultCheck );
         checks = checks || {};
-        var key, check;
-        for ( key in validation ) {
-            check = ( checks[ key ] !== undefined ? checks[ key ] : defaultCheck );
+        Object.keys( validation ).map( function ( key ) {
+            const check = ( checks[ key ] !== undefined ? checks[ key ] : defaultCheck );
             assert.equal( validation[ key ], check );
-        }
+        } );
     };
 
     it( 'It eats config with codes object', function () {
@@ -53,7 +52,7 @@ describe( 'Ogrn generator', function () {
     function testGenerator ( generator ) {
         describe( 'Generate method', function () {
 
-            var str;
+            let str;
 
             it( 'It generates something', function () {
                 str = generator.generate();
@@ -66,8 +65,8 @@ describe( 'Ogrn generator', function () {
 
         describe( 'Validate method', function () {
 
-            var str = generator.generate();
-            var validation;
+            let str = generator.generate();
+            let validation;
 
             it( 'It validates', function () {
                 validation = generator.validate( str );
@@ -79,10 +78,10 @@ describe( 'Ogrn generator', function () {
 
 
             it( 'Checksum validation could fail', function () {
-                var checksum = parseInt( str[ 12 ] );
-                var badStr = str.slice( 0, 12 ) + ( ( checksum + 1 ) % 10 );
+                const checksum = parseInt( str[ 12 ] );
+                const badStr = str.slice( 0, 12 ) + ( ( checksum + 1 ) % 10 );
 
-                var badValidation = generator.validate( badStr );
+                const badValidation = generator.validate( badStr );
 
                 checkValidation( badValidation, {
                     check: false
@@ -90,9 +89,9 @@ describe( 'Ogrn generator', function () {
             } );
 
             it ( 'It validates by length', function () {
-                var badStr = str + '1';
+                const badStr = str + '1';
 
-                var badValidation = generator.validate( badStr );
+                const badValidation = generator.validate( badStr );
 
                 checkValidation( badValidation, {
                     lengthVal: false
@@ -104,7 +103,7 @@ describe( 'Ogrn generator', function () {
 
     describe( ' Generator with codes object configured', function () {
 
-        var generator = ogrnGeneratorFabric( options );
+        const generator = ogrnGeneratorFabric( options );
 
         testGenerator( generator );
 
@@ -112,7 +111,7 @@ describe( 'Ogrn generator', function () {
 
     describe( 'Generator with codes array configured', function () {
 
-        var generator = ogrnGeneratorFabric( optionsWithCodesArray );
+        const generator = ogrnGeneratorFabric( optionsWithCodesArray );
 
         testGenerator( generator );
 
@@ -120,11 +119,11 @@ describe( 'Ogrn generator', function () {
 
     describe( 'Result depends on config', function () {
 
-        var generator = ogrnGeneratorFabric( optionsForSingle );
+        const generator = ogrnGeneratorFabric( optionsForSingle );
 
-        var str = generator.generate();
-        var testStr = "901012345678";
-        var check = parseInt( testStr ) % 11 % 10;
+        const str = generator.generate();
+        let testStr = "901012345678";
+        const check = parseInt( testStr ) % 11 % 10;
         testStr += check.toString();
 
         it( 'It generates by config', function () {
@@ -132,10 +131,10 @@ describe( 'Ogrn generator', function () {
         } );
 
         it( 'It validates by config', function () {
-            var validation = generator.validate( testStr );
+            let validation = generator.validate( testStr );
             checkValidation( validation );
 
-            var badStr = "012123456789000";
+            const badStr = "012123456789000";
             validation = generator.validate( badStr );
             checkValidation( validation, {}, false );
         } )
