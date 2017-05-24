@@ -1,6 +1,15 @@
 'use strict';
+const assert = require( 'assert' );
+const innFactory = require( './inn.js' );
 
-'use strict';
+function checkValidation ( validation, checks, defaultCheck ) {
+    defaultCheck = ( defaultCheck === undefined ? true : defaultCheck );
+    checks = checks || {};
+    Object.keys( validation ).map( function ( key ) {
+        const check = ( checks[ key ] === undefined ? defaultCheck : checks[ key ] );
+        assert.equal( validation[ key ], check );
+    } );
+}
 
 function getCodes ( count ) {
     const result = [...Array( count ).keys() ].map( function () {
@@ -16,24 +25,52 @@ function getNumbers ( count ) {
     return result;
 }
 
-const inn = require( './inn.js' )( {
-    subjects: require( './../subjects.json' ),
-    codes: getCodes( 20 ),
-    numbers: getNumbers( 20 )
-} );
-
 describe( "Inn service test", function () {
-
-    it( "", function () {
-
-        console.log( inn.generate() );
-        console.log( inn.generate() );
-        console.log( inn.generate() );
-        console.log( inn.generate() );
-        console.log( inn.generate() );
-
-        return true;
-
+    const inn = innFactory( {
+        subjects: require( './../subjects.json' ),
+        codes: getCodes( 1 ),
+        numbers: getNumbers( 1 )
     } );
+
+    let str;
+    let validation;
+    it( 'Generates something', function () {
+        str = inn.generate();
+    } );
+    it( 'Has valid length', function () {
+        assert.equal( str.length, 12 );
+    } );
+
+    it( 'validates', function () {
+        validation = inn.validate( str );
+    } );
+    it( 'generated is valid', function () {
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // continue to work here
+        // it doesn't work
+
+        checkValidation( validation );
+    } );
+    it( 'first checksum validation could fail', function () {
+        const firstCheck = parseInt( str.slice( 10, 11 ) );
+        const badStr = str.slice( 0, 10 ) + ( ( firstCheck + 1 ) % 10 ) + str.slice( 11, 12 );
+        const badValidation = inn.validate( badStr );
+        assert.equal( badValidation.firstCheck, false );
+    } );
+    it( 'second checksum validation could fail', function () {
+        const secondCheck = parseInt( str.slice( 11, 12 ) );
+        const badStr = str.slice( 0, 11 ) + ( ( secondCheck + 1 ) % 10 );
+        const badValidation = inn.validate( badStr );
+        assert.equal( badValidation.firstCheck, false );
+    } );
+    it( 'validates by length', function () {
+        const badStr = str + '1';
+        const badValidation = inn.validate( badStr );
+        assert.equal( badValidation.lengthVal, false );
+    } );
+
+    // TODO Add test like ogrn
 
 } );
