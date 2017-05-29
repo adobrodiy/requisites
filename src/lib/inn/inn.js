@@ -52,7 +52,7 @@ module.exports = function innFactory ( options ) {
             const firstCheckStr     = '' + subject + code + number;
             valid.firstCheck        = service.getInnFirstCheck( firstCheckStr )    == firstCheck;
             const secondCheckStr    = firstCheckStr + firstCheck;
-            valid.secondCheck       = service.getInnSecondCheck( secondCheck )     == secondCheck;
+            valid.secondCheck       = service.getInnSecondCheck( secondCheckStr )  == secondCheck;
             return valid;
         }
     }

@@ -14,14 +14,14 @@ function checkValidation ( validation, checks, defaultCheck ) {
 function getCodes ( count ) {
     const result = [...Array( count ).keys() ].map( function () {
         return Math.floor( Math.random() * 90 ) + 10;
-    } );
+    } ).map( function ( item ) { return item.toString(); } );
     return result;
 }
 
 function getNumbers ( count ) {
     const result = [...Array( count ).keys() ].map( function () {
         return Math.floor( Math.random() * 899999 ) + 100000;
-    } );
+    } ).map( function ( item ) { return item.toString(); } );
     return result;
 }
 
@@ -45,12 +45,6 @@ describe( "Inn service test", function () {
         validation = inn.validate( str );
     } );
     it( 'generated is valid', function () {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // continue to work here
-        // it doesn't work
-
         checkValidation( validation );
     } );
     it( 'first checksum validation could fail', function () {
@@ -63,7 +57,7 @@ describe( "Inn service test", function () {
         const secondCheck = parseInt( str.slice( 11, 12 ) );
         const badStr = str.slice( 0, 11 ) + ( ( secondCheck + 1 ) % 10 );
         const badValidation = inn.validate( badStr );
-        assert.equal( badValidation.firstCheck, false );
+        assert.equal( badValidation.secondCheck, false );
     } );
     it( 'validates by length', function () {
         const badStr = str + '1';
