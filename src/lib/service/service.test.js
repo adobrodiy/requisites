@@ -30,4 +30,10 @@ describe( "Inn service test", function () {
         assert.notEqual( index, -1 );
     } );
 
+    it( 'checkValidation', function () {
+        assert.equal( true,  service.checkValidation( { a: true, b: true, c: true  } ) );
+        assert.equal( false, service.checkValidation( { a: true, b: true, c: false } ) );
+        assert.equal( false, service.checkValidation( { a: true, b: true, c: ''    } ) );
+    } );
+
 } );
