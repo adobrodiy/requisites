@@ -1,10 +1,9 @@
 'use strict';
-
 const assert = require( 'assert' );
-const ogrnGeneratorFabric = require( './../lib/ogrn.js' );
+const service = require( './../service/service.js' );
+const ogrnGeneratorFabric = require( './ogrn.js' );
 
 describe( 'Ogrn generator', function () {
-
     const options = {
         initVals: [ "2", "3" ],
         years: [ "17", "16", "15" ],
@@ -15,7 +14,6 @@ describe( 'Ogrn generator', function () {
         },
         numbers: [ "12345", "54321" ]
     };
-
     const optionsWithCodesArray = {
         initVals: [ "2", "3" ],
         years: [ "17", "16", "15" ],
@@ -23,7 +21,6 @@ describe( 'Ogrn generator', function () {
         codes: [ "13", "66" ],
         numbers: [ "12345", "54321" ]
     };
-
     const optionsForSingle = {
         initVals: [ "9" ],
         years: [ "01" ],
@@ -32,93 +29,67 @@ describe( 'Ogrn generator', function () {
         numbers: [ "45678" ]
     };
 
-    function checkValidation ( validation, checks, defaultCheck ) {
-        defaultCheck = ( defaultCheck === undefined ? true : defaultCheck );
-        checks = checks || {};
-        Object.keys( validation ).map( function ( key ) {
-            const check = ( checks[ key ] !== undefined ? checks[ key ] : defaultCheck );
-            assert.equal( validation[ key ], check );
-        } );
-    };
-
     it( 'It eats config with codes object', function () {
         ogrnGeneratorFabric( options );
     } );
-
     it( 'It eats config with codes array', function () {
         ogrnGeneratorFabric( optionsWithCodesArray );
     } );
 
     function testGenerator ( generator ) {
         describe( 'Generate method', function () {
-
             let str;
-
             it( 'It generates something', function () {
                 str = generator.generate();
             } );
-
             it( ' Generated has valid length', function () {
                 assert.equal( 13, str.length );
             } )
         }  );
-
         describe( 'Validate method', function () {
-
             let str = generator.generate();
-            let validation;
-
+            let valid, validation;
             it( 'It validates', function () {
-                validation = generator.validate( str );
+                valid = generator.validate( str );
+                validation = generator.getValidation( str );
             } );
-
             it( 'Generated is valid', function () {
-                checkValidation( validation );
+                assert( true, valid );
+                assert( true, service.checkValidation( validation ) );
             } );
-
-
             it( 'Checksum validation could fail', function () {
                 const checksum = parseInt( str[ 12 ] );
                 const badStr = str.slice( 0, 12 ) + ( ( checksum + 1 ) % 10 );
-
-                const badValidation = generator.validate( badStr );
-
-                checkValidation( badValidation, {
-                    check: false
-                } );
+                assert.equal( false, generator.validate( badStr ) );
+                const badValidation = generator.getValidation( badStr );
+                assert.equal( false, badValidation.check );
+                const clearValidation = Object.assign( {}, badValidation, { check: true } );
+                assert.equal( true, service.checkValidation( clearValidation ) );
             } );
 
             it ( 'It validates by length', function () {
                 const badStr = str + '1';
-
-                const badValidation = generator.validate( badStr );
-
-                checkValidation( badValidation, {
-                    lengthVal: false
-                } );
+                assert.equal( false, generator.validate( badStr ) );
+                const badValidation = generator.getValidation( badStr );
+                assert.equal( false, badValidation.lengthVal );
+                const clearValidation = Object.assign( {}, badValidation, { lengthVal: true } );
+                assert.equal( true, service.checkValidation( clearValidation ) );
             } );
 
         } );
     }
 
     describe( ' Generator with codes object configured', function () {
-
         const generator = ogrnGeneratorFabric( options );
-
         testGenerator( generator );
-
     } );
 
     describe( 'Generator with codes array configured', function () {
-
         const generator = ogrnGeneratorFabric( optionsWithCodesArray );
-
         testGenerator( generator );
-
     } );
 
     describe( 'Result depends on config', function () {
-
         const generator = ogrnGeneratorFabric( optionsForSingle );
 
         const str = generator.generate();
@@ -131,14 +102,15 @@ describe( 'Ogrn generator', function () {
         } );
 
         it( 'It validates by config', function () {
-            let validation = generator.validate( testStr );
-            checkValidation( validation );
+            assert( true, generator.validate( testStr ) );
+            let validation = generator.getValidation( testStr );
+            assert.equal( true, service.checkValidation( validation ) );
 
             const badStr = "012123456789000";
-            validation = generator.validate( badStr );
-            checkValidation( validation, {}, false );
+            assert.equal( false, generator.validate( badStr ) );
+            validation = generator.getValidation( badStr );
+            assert.equal( false, Object.keys( validation ).some( key => validation[ key ] ) );
         } )
     } );
-    
 
 } );

@@ -1,15 +1,7 @@
 'use strict';
 const assert = require( 'assert' );
-const innFactory = require( './inn.js' );
-
-function checkValidation ( validation, checks, defaultCheck ) {
-    defaultCheck = ( defaultCheck === undefined ? true : defaultCheck );
-    checks = checks || {};
-    Object.keys( validation ).map( function ( key ) {
-        const check = ( checks[ key ] === undefined ? defaultCheck : checks[ key ] );
-        assert.equal( validation[ key ], check );
-    } );
-}
+const service = require( './../service/service.js' );
+const innFactory = require( './person-inn.js' );
 
 function getCodes ( count ) {
     const result = [...Array( count ).keys() ].map( function () {
@@ -47,7 +39,7 @@ describe( "Inn service test", function () {
     } );
     it( 'Generated is valid', function () {
         assert.equal( true, inn.validate( str ) );
-        checkValidation( validation );
+        assert.equal( true, service.checkValidation( validation ) );
     } );
     it( 'Validation could fail', function () {
         assert.equal( false, inn.validate( str + '1' ) );
