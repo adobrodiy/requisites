@@ -3,7 +3,8 @@ module.exports = {
     getInnFirstCheck    : getInnFirstCheck      ,
     getInnSecondCheck   : getInnSecondCheck     ,
     getRandomElement    : getRandomElement      ,
-    checkValidation     : checkValidation
+    checkValidation     : checkValidation       ,
+    getSnilsCheck       : getSnilsCheck
 };
 /**
  * for getting first digit of control sum
@@ -61,4 +62,23 @@ function getRandomElement ( array ) {
  */
 function checkValidation ( validation ) {
     return Object.keys( validation ).every( key => validation[ key ] );
+}
+
+/**
+ * @param str
+ * @returns {string}
+ */
+function getSnilsCheck ( str ) {
+    const sum = (
+        9 * str[ 0 ] +
+        8 * str[ 1 ] +
+        7 * str[ 2 ] +
+        6 * str[ 3 ] +
+        5 * str[ 4 ] +
+        4 * str[ 5 ] +
+        3 * str[ 6 ] +
+        2 * str[ 7 ] +
+            str[ 8 ]
+    ) % 101;
+    return ( "0" + sum ).slice( -2 );
 }

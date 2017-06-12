@@ -17,7 +17,7 @@ function getNumbers ( count ) {
     return result;
 }
 
-describe( "Inn service test", function () {
+describe( "Person inn service test", function () {
     const inn = innFactory( {
         subjects: require( './../subjects.json' ),
         codes: getCodes( 1 ),
@@ -45,21 +45,21 @@ describe( "Inn service test", function () {
         assert.equal( false, inn.validate( str + '1' ) );
     } );
 
-    it( 'first checksum validation could fail', function () {
+    it( 'First checksum validation could fail', function () {
         const firstCheck = parseInt( str.slice( 10, 11 ) );
         const badStr = str.slice( 0, 10 ) + ( ( firstCheck + 1 ) % 10 ) + str.slice( 11, 12 );
         const badValidation = inn.getValidation( badStr );
         assert.equal( false, inn.validate( badStr ) );
         assert.equal( badValidation.firstCheck, false );
     } );
-    it( 'second checksum validation could fail', function () {
+    it( 'Second checksum validation could fail', function () {
         const secondCheck = parseInt( str.slice( 11, 12 ) );
         const badStr = str.slice( 0, 11 ) + ( ( secondCheck + 1 ) % 10 );
         const badValidation = inn.getValidation( badStr );
         assert.equal( false, inn.validate( badStr ) );
         assert.equal( badValidation.secondCheck, false );
     } );
-    it( 'validates by length', function () {
+    it( 'It validates by length', function () {
         const badStr = str + '1';
         const badValidation = inn.getValidation( badStr );
         assert.equal( false, inn.validate( badStr ) );
