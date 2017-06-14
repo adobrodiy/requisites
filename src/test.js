@@ -4,7 +4,8 @@ const path = require( 'path' );
 const files = [
     [ 'ogrn', 'ogrn.test.js' ],
     [ 'person-inn', 'person-inn.test.js' ],
-    [ 'service', 'service.test.js' ]
+    [ 'service', 'service.test.js' ],
+    [ 'snils', 'snils.test.js' ]
 ];
 
 files.forEach( function ( file ) {
