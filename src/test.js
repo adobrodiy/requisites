@@ -5,7 +5,8 @@ const files = [
     [ 'ogrn', 'ogrn.test.js' ],
     [ 'person-inn', 'person-inn.test.js' ],
     [ 'service', 'service.test.js' ],
-    [ 'snils', 'snils.test.js' ]
+    [ 'snils', 'snils.test.js' ],
+    [ 'passport-rf-number', 'passport-rf-number.test.js' ]
 ];
 
 files.forEach( function ( file ) {
