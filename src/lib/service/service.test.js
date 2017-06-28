@@ -36,4 +36,16 @@ describe( "Inn service test", function () {
         assert.equal( false, service.checkValidation( { a: true, b: true, c: ''    } ) );
     } );
 
+    it( 'generateStrings', function () {
+        const length = 5, count = 100;
+        const exclude = service.generateStrings( length, count );
+        const array = service.generateStrings( length, count, exclude );
+        assert.equal( count, array.length );
+        array.forEach( item => {
+            assert.equal( length, item.length );
+            assert.equal( item, parseInt( item ) );
+            assert.equal( false, exclude.includes(item) );
+        } );
+    } );
+
 } );

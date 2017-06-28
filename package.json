@@ -4,7 +4,8 @@
   "description": "requisites generator",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha src/test.js"
+    "test": "mocha src/**/*.test.js",
+    "test-service":"mocha src/lib/service/*.test.js"
   },
   "repository": {
     "type": "git",

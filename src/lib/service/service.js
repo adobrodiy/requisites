@@ -4,7 +4,8 @@ module.exports = {
     getInnSecondCheck   : getInnSecondCheck     ,
     getRandomElement    : getRandomElement      ,
     checkValidation     : checkValidation       ,
-    getSnilsCheck       : getSnilsCheck
+    getSnilsCheck       : getSnilsCheck         ,
+    generateStrings     : generateStrings
 };
 /**
  * for getting first digit of control sum
@@ -81,4 +82,24 @@ function getSnilsCheck ( str ) {
             str[ 8 ]
     ) % 101;
     return ( "0" + sum ).slice( -2 );
+}
+
+/**
+ * @param {Integer} length -
+ * @param {Integer} count  -
+ * @param {String[]} exclude -
+ * @returns {String[]} array of length-digit strings
+ */
+function generateStrings ( length, count, exclude=[] ) {
+    const min = Math.pow(10, length - 1);
+    const max = Math.pow(10, length) - min;
+    const getRandom = () => Math.floor( Math.random() * max ) + min;
+    const result = [];
+    while ( result.length < count ) {
+        const item = getRandom().toString();
+        if ( !exclude.includes( item ) ) {
+            result.push( item );
+        }
+    }
+    return result;
 }
